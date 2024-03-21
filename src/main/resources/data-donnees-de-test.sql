@@ -1,3 +1,7 @@
+INSERT INTO user (email, password, admin) VALUES
+("a@a.com","$2a$10$OT6TgAfVBuYuxKEsq4sbGO3n0jyG5s0rMVf39CQgmxLbK9YOMeFdC", 1),
+("b@b.com","$2a$10$OT6TgAfVBuYuxKEsq4sbGO3n0jyG5s0rMVf39CQgmxLbK9YOMeFdC", 0);
+
 INSERT INTO category (nom) VALUES
 ("Cafe"),
 ("Consommable");
