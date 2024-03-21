@@ -17,5 +17,6 @@ public class User {
     protected Integer id;
     protected String email;
     protected String password;
+    protected boolean admin;
 
 }
