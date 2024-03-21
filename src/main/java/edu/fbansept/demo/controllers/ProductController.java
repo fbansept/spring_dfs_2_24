@@ -1,7 +1,9 @@
 package edu.fbansept.demo.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import edu.fbansept.demo.dao.ProductDao;
 import edu.fbansept.demo.models.Product;
+import edu.fbansept.demo.views.ProductView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ public class ProductController {
     ProductDao productDao;
 
     @GetMapping("/product/list")
+    @JsonView(ProductView.class)
     public List<Product> liste() {
 
         List<Product> productList = productDao.findAll();
@@ -28,6 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
+    @JsonView(ProductView.class)
     public ResponseEntity<Product> get(@PathVariable int id) {
 
         Optional<Product> optionalProduct =  productDao.findById(id);
@@ -41,6 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("/product-by-nom/{nom}")
+    @JsonView(ProductView.class)
     public ResponseEntity<Product> getByNom(@PathVariable String nom) {
 
         Optional<Product> optionalProduct =  productDao.findByNom(nom);
@@ -54,6 +59,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{id}")
+    @JsonView(ProductView.class)
     public ResponseEntity<Product> delete(@PathVariable int id) {
 
         Optional<Product> optionalProduct =  productDao.findById(id);
@@ -67,6 +73,7 @@ public class ProductController {
     }
 
     @PostMapping("/product")
+    @JsonView(ProductView.class)
     public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
         product.setId(null);
         productDao.save(product);
@@ -74,6 +81,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
+    @JsonView(ProductView.class)
     public ResponseEntity<Product> update(@RequestBody @Valid Product product, @PathVariable int id) {
         product.setId(id);
 

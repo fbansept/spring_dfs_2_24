@@ -1,7 +1,9 @@
 package edu.fbansept.demo.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import edu.fbansept.demo.dao.CategoryDao;
 import edu.fbansept.demo.models.Category;
+import edu.fbansept.demo.views.CategoryView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ public class CategoryController {
     CategoryDao categoryDao;
 
     @GetMapping("/category/list")
+    @JsonView(CategoryView.class)
     public List<Category> liste() {
 
         List<Category> categoryList = categoryDao.findAll();
@@ -27,6 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("/category/{id}")
+    @JsonView(CategoryView.class)
     public ResponseEntity<Category> get(@PathVariable int id) {
 
         Optional<Category> optionalCategory =  categoryDao.findById(id);
@@ -40,6 +44,7 @@ public class CategoryController {
     }
 
     @GetMapping("/category-by-nom/{nom}")
+    @JsonView(CategoryView.class)
     public ResponseEntity<Category> getByNom(@PathVariable String nom) {
 
         Optional<Category> optionalCategory =  categoryDao.findByNom(nom);
@@ -53,6 +58,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/category/{id}")
+    @JsonView(CategoryView.class)
     public ResponseEntity<Category> delete(@PathVariable int id) {
 
         Optional<Category> optionalCategory =  categoryDao.findById(id);
@@ -66,6 +72,7 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
+    @JsonView(CategoryView.class)
     public ResponseEntity<Category> create(@RequestBody @Valid Category category) {
         category.setId(null);
         categoryDao.save(category);
@@ -73,6 +80,7 @@ public class CategoryController {
     }
 
     @PutMapping("/category/{id}")
+    @JsonView(CategoryView.class)
     public ResponseEntity<Category> update(@RequestBody @Valid Category category, @PathVariable int id) {
         category.setId(id);
 
