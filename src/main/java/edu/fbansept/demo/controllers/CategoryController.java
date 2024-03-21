@@ -71,7 +71,7 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/category")
+    @PostMapping("/admin/category")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> create(@RequestBody @Valid Category category) {
         category.setId(null);
