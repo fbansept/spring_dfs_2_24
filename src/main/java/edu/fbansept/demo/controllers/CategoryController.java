@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CategoryController {
     CategoryDao categoryDao;
 
     @GetMapping("/category/list")
+    @Secured("ROLE_USER")
     @JsonView(CategoryView.class)
     public List<Category> liste() {
 
@@ -30,6 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping("/category/{id}")
+    @Secured("ROLE_USER")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> get(@PathVariable int id) {
 
@@ -44,6 +47,7 @@ public class CategoryController {
     }
 
     @GetMapping("/category-by-nom/{nom}")
+    @Secured("ROLE_USER")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> getByNom(@PathVariable String nom) {
 
@@ -58,6 +62,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/category/{id}")
+    @Secured("ROLE_USER")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> delete(@PathVariable int id) {
 
@@ -71,7 +76,8 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/admin/category")
+    @PostMapping("/category")
+    @Secured("ROLE_ADMIN")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> create(@RequestBody @Valid Category category) {
         category.setId(null);
@@ -80,6 +86,7 @@ public class CategoryController {
     }
 
     @PutMapping("/category/{id}")
+    @Secured("ROLE_ADMIN")
     @JsonView(CategoryView.class)
     public ResponseEntity<Category> update(@RequestBody @Valid Category category, @PathVariable int id) {
         category.setId(id);
