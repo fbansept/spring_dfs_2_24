@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     @Autowired
     AppUserDetailsService userDetailsservice;
 
+    @Autowired
+    JwtFilter jwtFilter;
+
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -40,9 +44,13 @@ public class SecurityConfig {
         http.csrf(config -> config.disable())
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
-                        config -> config.requestMatchers("/sign-in").permitAll()
+                        config -> config.requestMatchers("/sign-in", "/login").permitAll()
+                                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                        //.requestMatchers("/**").hasRole("USER")
+                                        .anyRequest().authenticated()
                 )
-                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -50,7 +58,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        //Make the below setting as * to allow connection from any hos
         corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
